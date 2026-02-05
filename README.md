@@ -1,42 +1,143 @@
-# 🛡️ Missão: Construir uma Base de Dados de Territórios
+# 🗺️ Desafio WAR Estruturado – Conquista de Territórios
 
-## O que você vai fazer
-Criar uma struct chamada **Territorio** que armazenará informações como nome, cor do exército e quantidade de tropas.  
-O sistema permitirá o cadastro de 5 territórios e exibirá seus dados logo após o preenchimento.
+Bem-vindo ao **Desafio WAR Estruturado!** Inspirado no famoso jogo de estratégia, este desafio convida você a programar diferentes versões do jogo WAR, evoluindo seus conhecimentos em **C** à medida que avança pelos níveis **Novato**, **Aventureiro** e **Mestre**.
 
----
-
-## ✅ Requisitos Funcionais
-- Criação da struct: definir uma struct chamada `Territorio` com os campos `char nome[30]`, `char cor[10]` e `int tropas`.
-- Cadastro dos territórios: o sistema deve permitir que o usuário cadastre cinco territórios informando o nome, cor do exército e o número de tropas de cada um.
-- Exibição dos dados: o sistema deve exibir as informações de todos os territórios registrados após o cadastro.
+A empresa **MateCheck** contratou você para criar uma versão estruturada do WAR. Cada nível propõe novas funcionalidades, conceitos e desafios de programação. **Você escolhe por onde começar!**
 
 ---
 
-## ⚙️ Requisitos Não Funcionais
-- Usabilidade: a interface de entrada deve ser simples e clara, com mensagens que orientem o usuário sobre o que digitar.
-- Desempenho: o sistema deve apresentar os dados logo após o cadastro, com tempo de resposta inferior a 2 segundos.
-- Documentação: o código deve conter comentários explicativos sobre a criação da struct, entrada e exibição de dados.
-- Manutenibilidade: os nomes das variáveis e funções devem ser claros e representativos, facilitando a leitura e manutenção do código.
+## 🧩 Nível Novato: Cadastro Inicial dos Territórios
 
----
+### 🎯 Objetivo
 
-## 📝 Instruções Detalhadas
-- Bibliotecas necessárias: inclua as bibliotecas `stdio.h` e `string.h`.
-- Definição da struct: crie a struct `Territorio` com os campos mencionados.
-- Declaração de vetor de structs: crie um vetor com capacidade para armazenar 5 estruturas do tipo `Territorio`.
-- Entrada dos dados: utilize um laço `for` para preencher os dados dos 5 territórios.
-- Exibição: percorra, após o cadastro, o vetor e exiba os dados de cada território com formatação clara.
+- Criar uma `struct` chamada `Territorio`.
+- Usar um **vetor estático de 5 elementos** para armazenar os territórios.
+- Cadastrar os dados de cada território: **Nome**, **Cor do Exército**, e **Número de Tropas**.
+- Exibir o estado atual do mapa.
 
----
+### ⚙️ Funcionalidades
 
-## 🔧 Requisitos Técnicos Adicionais
-- Use `scanf` para ler o nome e o número de tropas.
-- Utilize `fgets` ou `scanf("%s", ...)` com cuidado para strings.
-- Comente seu código explicando a criação e o uso da struct e a lógica do laço de entrada e saída.
+- Leitura de dados pelo terminal (`fgets` e `scanf`)
+- Impressão organizada dos dados de todos os territórios
 
----
+### 💡 Conceitos abordados
 
-## 💡 Comentários Adicionais
-Este desafio introduz o conceito de **structs** como ferramenta para agrupar dados relacionados.  
-Assim, ao final, você entenderá como utilizar **estruturas compostas** para organizar informações e criar sistemas mais **legíveis e escaláveis**.
+- `struct`
+- Vetor estático
+- Entrada/saída com `scanf`, `fgets`, e `printf`
+
+### 📥 Entrada
+
+O usuário digita o nome do território, a cor do exército dominante e o número de tropas para **cada um dos 5 territórios**.
+
+### 📤 Saída
+
+
+
+## 🧗‍♂️ Nível Aventureiro: Batalhas Estratégicas
+
+### 🎯 Objetivo
+
+- Substituir o vetor estático por **alocação dinâmica com `calloc`**
+- Criar uma função para **simular ataques entre dois territórios**
+- Utilizar números aleatórios para representar dados de batalha
+
+### 🆕 Novidades em relação ao Nível Novato
+
+- Alocação dinâmica de memória com `calloc`
+- Uso de **ponteiros**
+- Laço interativo para o jogador escolher **territórios para atacar e defender**
+- Simulação de dados de ataque e defesa com `rand()`
+
+### ⚙️ Funcionalidades
+
+- Cadastro dos territórios (como no Nível Novato)
+- Fase de ataque com:
+  - Escolha de atacante e defensor
+  - Dados de ataque/defesa
+  - Lógica:
+    - Se atacante vence → defensor perde 1 tropa
+    - Se defensor perde todas → território é conquistado
+    - Empates favorecem o atacante
+
+### 💡 Conceitos abordados
+
+- Ponteiros
+- `calloc` / `free`
+- Aleatoriedade com `rand()` / `srand()`
+- Funções para modularização
+
+### 📥 Entrada
+
+- Território **atacante** (1 a 5)
+- Território **defensor** (1 a 5)
+
+### 📤 Saída
+
+Exibição do resultado da batalha, dados sorteados e mudanças no mapa.
+
+
+
+## 🧠 Nível Mestre: Missões e Modularização Total
+
+### 🎯 Objetivo
+
+- Dividir o código em funções bem definidas
+- Implementar um **sistema de missões**
+- Verificar cumprimento da missão
+- Aplicar **boas práticas** (uso de `const`, modularização, etc.)
+
+### 🆕 Diferenças em relação ao Nível Aventureiro
+
+- Modularização total em funções
+- Missões aleatórias atribuídas:
+  1. Destruir o exército **Verde**
+  2. Conquistar **3 territórios**
+- Menu interativo com opções
+
+### ⚙️ Funcionalidades
+
+- Inicialização automática dos territórios
+- Menu principal com 3 opções:
+  1. Atacar
+  2. Verificar Missão
+  3. Sair
+- Verificação de vitória da missão
+
+### 💡 Conceitos abordados
+
+- Modularização
+- `const` correctness
+- Estruturação em múltiplas funções
+- Passagem por referência
+
+### 📥 Entrada
+
+- Ações do jogador via menu:
+  - `1` - Atacar
+  - `2` - Verificar Missão
+  - `0` - Sair
+- Escolha de territórios para ataque
+
+### 📤 Saída
+
+- Mapa atualizado
+- Resultados das batalhas
+- Verificação da missão
+- Mensagem de vitória
+
+
+
+## 🏁 Conclusão
+
+Com este **Desafio WAR Estruturado**, você praticará fundamentos essenciais da linguagem **C** de forma **divertida e progressiva**.
+
+Cada nível foca em um conjunto de habilidades:
+
+- 🟢 **Novato**: `struct`, vetor, entrada/saída
+- 🔵 **Aventureiro**: ponteiros, memória dinâmica, lógica de jogo
+- 🟣 **Mestre**: modularização, design limpo, sistema de missões
+
+
+
+🚀 **Boa sorte! Avance nos níveis e torne-se um mestre da programação estratégica!**
