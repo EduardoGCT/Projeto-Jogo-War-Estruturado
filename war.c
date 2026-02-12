@@ -40,29 +40,9 @@ void limparBufferEntrada(){
 }
 
 //função para cadastrar territórios
-void cadastro_territorio(territorio mapa[MAX_TERRITORIOS]){
-
-    for(int i = 0; i < MAX_TERRITORIOS; i++){
-    printf("===========================\n");
-    printf("Cadastro de territorio %d\n", i + 1);
-    
-
-    printf("Nome do territorio: ");
-    fgets(mapa[i].nome, MAX_STRING, stdin);
-    mapa[i].nome[strcspn(mapa[i].nome, "\n")] = '\0';
-
-    printf("Cor do territorio: ");
-    fgets(mapa[i].cor, MAX_STRING, stdin);
-    mapa[i].cor[strcspn(mapa[i].cor, "\n")] = '\0';
-
-    printf("Numero de tropas: ");
-    scanf("%d", &mapa[i].tropas);
-    limparBufferEntrada();
-    printf("===========================\n");
-
-    }  
-}
-
+void cadastro_territorio(territorio *mapa);
+void mostrar_territorios(territorio *mapa);
+void mapa_do_mundo(const territorio *mapa);
 //função de ataque
 void atacar(territorio* atacante, territorio* defensor){
     printf("\n\n--- Execucao do ataque ---\n");
@@ -86,7 +66,7 @@ void atacar(territorio* atacante, territorio* defensor){
 
         if(defensor->tropas <= 0){
             strcpy(defensor->cor, atacante->cor);
-            printf("CONSQUISTA! O territorio %s foi dominado pelo Exercito %s!\n", defensor->nome, atacante->cor);
+            printf("CONQUISTA! O territorio %s foi dominado pelo Exercito %s!\n", defensor->nome, atacante->cor);
         }
     } 
     else {
@@ -99,31 +79,6 @@ void atacar(territorio* atacante, territorio* defensor){
     getchar();
 }  
 
-    
-
-//função para printar todos os territórios
-void mostrar_territorios(territorio mapa[MAX_TERRITORIOS]){
-    for (int i = 0; i < MAX_TERRITORIOS; i++){
-        printf("-----------------------------\n");
-        printf("TERRITORIO %d: \n", i + 1);
-        printf("- Nome: %s\n", mapa[i].nome);
-        printf("- cor: %s\n", mapa[i].cor);
-        printf("- tropas: %d\n", mapa[i].tropas);
-        printf("----------------------------\n");
-    }
-    printf("\n\n");
-}
-
-void mapa_do_mundo(territorio mapa[MAX_TERRITORIOS]){
-    printf("--- MAPA DO MUNDO - ESTADO ATUAL ---\n");
-    printf("===========================================\n\n");
-
-    for (int i = 0; i < MAX_TERRITORIOS; i++){
-        printf("%d. %s (Exercito %s, Tropas: %d)\n", i + 1, mapa[i].nome, mapa[i].cor, mapa[i].tropas);
-    }
-
-    printf("\n");
-}
 
 // Funções de setup e gerenciamento de memória:
 // Funções de interface com o usuário:
@@ -215,9 +170,47 @@ int main() {
 // Aloca dinamicamente a memória para o vetor de territórios usando calloc.
 // Retorna um ponteiro para a memória alocada ou NULL em caso de falha.
 
-// inicializarTerritorios():
+
 // Preenche os dados iniciais de cada território no mapa (nome, cor do exército, número de tropas).
 // Esta função modifica o mapa passado por referência (ponteiro).
+void cadastro_territorio (territorio *mapa){
+
+    for(int i = 0; i < MAX_TERRITORIOS; i++){
+    printf("===========================\n");
+    printf("Cadastro de territorio %d\n", i + 1);
+    
+
+    printf("Nome do territorio: ");
+    fgets(mapa[i].nome, MAX_STRING, stdin);
+    mapa[i].nome[strcspn(mapa[i].nome, "\n")] = '\0';
+
+    printf("Cor do territorio: ");
+    fgets(mapa[i].cor, MAX_STRING, stdin);
+    mapa[i].cor[strcspn(mapa[i].cor, "\n")] = '\0';
+
+    printf("Numero de tropas: ");
+    scanf("%d", &mapa[i].tropas);
+    limparBufferEntrada();
+    printf("===========================\n");
+
+    }
+}
+
+/**
+ * @brief Mostra na tela todos os territórios cadastrados
+ * @param mapa array de territorios
+ */
+void mostrar_territorios(territorio *mapa){
+    for (int i = 0; i < MAX_TERRITORIOS; i++){
+        printf("-----------------------------\n");
+        printf("TERRITORIO %d: \n", i + 1);
+        printf("- Nome: %s\n", mapa[i].nome);
+        printf("- cor: %s\n", mapa[i].cor);
+        printf("- tropas: %d\n", mapa[i].tropas);
+        printf("----------------------------\n");
+    }
+    printf("\n\n");
+}
 
 // liberarMemoria():
 // Libera a memória previamente alocada para o mapa usando free.
@@ -228,6 +221,16 @@ int main() {
 // exibirMapa():
 // Mostra o estado atual de todos os territórios no mapa, formatado como uma tabela.
 // Usa 'const' para garantir que a função apenas leia os dados do mapa, sem modificá-los.
+void mapa_do_mundo(const territorio *mapa){
+    printf("--- MAPA DO MUNDO - ESTADO ATUAL ---\n");
+    printf("===========================================\n\n");
+
+    for (int i = 0; i < MAX_TERRITORIOS; i++){
+        printf("%d. %s (Exercito %s, Tropas: %d)\n", i + 1, mapa[i].nome, mapa[i].cor, mapa[i].tropas);
+    }
+
+    printf("\n");
+}
 
 // exibirMissao():
 // Exibe a descrição da missão atual do jogador com base no ID da missão sorteada.
