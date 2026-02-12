@@ -33,57 +33,21 @@ typedef struct {
 } territorio;
 
 // --- Protótipos das Funções ---
-// Declarações antecipadas de todas as funções que serão usadas no programa, organizadas por categoria.
-void limparBufferEntrada(){
-    int c;
-    while ((c= getchar()) != '\n' && c != EOF);
-}
 
 //função para cadastrar territórios
-void cadastro_territorio(territorio *mapa);
-void mostrar_territorios(territorio *mapa);
-void mapa_do_mundo(const territorio *mapa);
-//função de ataque
-void atacar(territorio* atacante, territorio* defensor){
-    printf("\n\n--- Execucao do ataque ---\n");
-
-    //verificando se o endereço é válido
-    if (atacante == NULL || defensor == NULL) return;
-
-    printf("\n%s atacando %s!", atacante->nome, defensor->nome);
-
-    // 1. Gerando os dados (rand)
-    int dado_ataque = (rand() % 6) + 1;
-    int dado_defesa = (rand() % 6) + 1;
-
-    printf("\nDado do Atacante: [%d]", dado_ataque);
-    printf("\nDado do Defensor: [%d]\n", dado_defesa);
-
-    // 2. Comparação e Manipulação de Memória via Ponteiros
-    if (dado_ataque > dado_defesa) {
-        printf("Vitoria do atacante! %s perdeu 1 tropa.\n", defensor->nome);
-        defensor->tropas -= 1; // Altera o valor no endereço de memória do defensor
-
-        if(defensor->tropas <= 0){
-            strcpy(defensor->cor, atacante->cor);
-            printf("CONQUISTA! O territorio %s foi dominado pelo Exercito %s!\n", defensor->nome, atacante->cor);
-        }
-    } 
-    else {
-        printf("O defensor resistiu! %s perdeu 1 tropa.\n", atacante->nome);
-        atacante->tropas -= 1; // Altera o valor no endereço de memória do atacante
-    }
-    printf("-----------------------\n");
-
-    printf("pressione Enter para continuar...");
-    getchar();
-}  
-
 
 // Funções de setup e gerenciamento de memória:
+
 // Funções de interface com o usuário:
+void mostrar_territorios(territorio *mapa);
+void cadastro_territorio(territorio *mapa);
+void mapa_do_mundo(const territorio *mapa);
+
 // Funções de lógica principal do jogo:
+void atacar(territorio* atacante, territorio* defensor);
+
 // Função utilitária:
+void limparBufferEntrada();
 
 // --- Função Principal (main) ---
 // Função principal que orquestra o fluxo do jogo, chamando as outras funções em ordem.
@@ -243,6 +207,40 @@ void mapa_do_mundo(const territorio *mapa){
 // Executa a lógica de uma batalha entre dois territórios.
 // Realiza validações, rola os dados, compara os resultados e atualiza o número de tropas.
 // Se um território for conquistado, atualiza seu dono e move uma tropa.
+void ataque(territorio* atacante, territorio* defensor){
+    printf("\n\n--- Execucao do ataque ---\n");
+
+    //verificando se o endereço é válido
+    if (atacante == NULL || defensor == NULL) return;
+
+    printf("\n%s atacando %s!", atacante->nome, defensor->nome);
+
+    // 1. Gerando os dados (rand)
+    int dado_ataque = (rand() % 6) + 1;
+    int dado_defesa = (rand() % 6) + 1;
+
+    printf("\nDado do Atacante: [%d]", dado_ataque);
+    printf("\nDado do Defensor: [%d]\n", dado_defesa);
+
+    // 2. Comparação e Manipulação de Memória via Ponteiros
+    if (dado_ataque > dado_defesa) {
+        printf("Vitoria do atacante! %s perdeu 1 tropa.\n", defensor->nome);
+        defensor->tropas -= 1; // Altera o valor no endereço de memória do defensor
+
+        if(defensor->tropas <= 0){
+            strcpy(defensor->cor, atacante->cor);
+            printf("CONQUISTA! O territorio %s foi dominado pelo Exercito %s!\n", defensor->nome, atacante->cor);
+        }
+    } 
+    else {
+        printf("O defensor resistiu! %s perdeu 1 tropa.\n", atacante->nome);
+        atacante->tropas -= 1; // Altera o valor no endereço de memória do atacante
+    }
+    printf("-----------------------\n");
+
+    printf("pressione Enter para continuar...");
+    getchar();
+}
 
 // sortearMissao():
 // Sorteia e retorna um ID de missão aleatório para o jogador.
@@ -254,3 +252,7 @@ void mapa_do_mundo(const territorio *mapa){
 
 // limparBufferEntrada():
 // Função utilitária para limpar o buffer de entrada do teclado (stdin), evitando problemas com leituras consecutivas de scanf e getchar.
+void limparBufferEntrada(){
+    int c;
+    while ((c= getchar()) != '\n' && c != EOF);
+}
