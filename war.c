@@ -191,7 +191,7 @@ void mapa_do_mundo(const territorio *mapa){
 // Executa a lógica de uma batalha entre dois territórios.
 // Realiza validações, rola os dados, compara os resultados e atualiza o número de tropas.
 // Se um território for conquistado, atualiza seu dono e move uma tropa.
-void ataque(territorio* atacante, territorio* defensor){
+void atacar(territorio* atacante, territorio* defensor){
     printf("\n\n--- Execucao do ataque ---\n");
 
     //verificando se o endereço é válido
