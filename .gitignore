@@ -1,0 +1,9 @@
+# Ignorar pasta de configurações do VS Code
+.vscode/
+
+# Ignorar executáveis Windows
+*.exe
+
+# Ignorar binários compilados (comum no Linux)
+# Se você gera um executável chamado 'meu_app' sem extensão:
+/war
