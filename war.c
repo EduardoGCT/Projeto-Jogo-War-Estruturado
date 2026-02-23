@@ -17,24 +17,15 @@ typedef struct {
 } territorio;
 
 // --- Protótipos das Funções ---
-
-//função para cadastrar territórios
-
-// Funções de setup e gerenciamento de memória:
-
-// Funções de interface com o usuário:
 void mostrar_territorios(territorio *mapa);
 void cadastro_territorio(territorio *mapa);
 void mapa_do_mundo(const territorio *mapa);
-
-// Funções de lógica principal do jogo:
 void atacar(territorio* atacante, territorio* defensor);
-
-// Função utilitária:
 void limparBufferEntrada();
+void atribuirMissao(char* destino, const char* missoes[], int totalMissoes);
+int verificarMissao(char* missao, territorio* mapa, int tamanho);
 
-// --- Função Principal (main) ---
-// Função principal que orquestra o fluxo do jogo, chamando as outras funções em ordem.
+
 int main() {
 
     //definindo aleatoriedade no srand
@@ -55,32 +46,76 @@ int main() {
 
     //mostrando todos os territórios cadastrados
     mostrar_territorios(mapa);
-    
+
+    //Vetor de missoes
+    const char* missoes[] = {
+    "Conquistar 3 territorios",
+    "Eliminar todas as tropas de um territorio",
+    "Conquistar um territorio",
+    "Ganhar 3 tropas",
+    "Dominar todos os territorios"
+    };
+    int totalDeMissoes = 5;
+
+    char destino[MAX_STRING]; //Guarda a missão do jogador
+
+    // Chamada da função para atribuir missão
+    atribuirMissao(destino, missoes, totalDeMissoes);
+
+    //Inicializando o loop do jogo
     int opcao, atacante_id, defensor_id;
     
     do{
         mapa_do_mundo(mapa);
 
-        printf("--- Fase de ataque ---\n");
-
-        printf("Escolha o territorio atacante (1 a 5, ou 0 para sair): ");
-        scanf("%d", &atacante_id);
-
-        if(atacante_id == 0) break; //sai do loop
-
-        printf("Escolha o territorio defensor (1 a 5): ");
-        scanf("%d", &defensor_id);
-
-        territorio *p_atq = &mapa[atacante_id - 1];
-        territorio *p_def = &mapa[defensor_id - 1];
-
-        limparBufferEntrada();
-
-        atacar(p_atq, p_def);
-
-
         
 
+        printf("\n___ Sua missao neste jogo (Exercito %s): %s ___\n\n", mapa[0].cor, destino);
+
+        //mostrando menu geral
+        int opcao;
+        printf("\n---MENU DE ACOES---\n");
+
+        printf("1 - Atacar\n");
+        printf("2 - Verificar missao\n");
+        printf("0 - Sair\n");
+        printf("Escolha sua acao: ");
+        scanf("%d", &opcao);
+        limparBufferEntrada();
+
+        switch(opcao){
+            case 1: //Atacar
+                printf("--- Fase de ataque ---\n");
+
+                printf("Escolha o territorio atacante (1 a 5, ou 0 para sair): ");
+                scanf("%d", &atacante_id);
+
+                if(atacante_id == 0) break; //sai do loop
+
+                printf("Escolha o territorio defensor (1 a 5): ");
+                scanf("%d", &defensor_id);
+
+                territorio *p_atq = &mapa[atacante_id - 1];
+                territorio *p_def = &mapa[defensor_id - 1];
+
+                limparBufferEntrada();
+                atacar(p_atq, p_def);
+                break;
+            
+            case 2: //verificar missão
+                if (verificarMissao(destino, mapa, MAX_TERRITORIOS)) {
+                    printf("\n==================================\n");
+                    printf(" PARABENS! Voce cumpriu sua missao!\n");
+                    printf("==================================\n");
+                } else {
+                    printf("\n___ Voce ainda nao cumpriu seu objetivo. Continue lutando! ___\n\n");
+                } 
+                break;
+
+            case 0:
+                atacante_id = 0; // Para encerrar o loop
+            break;  
+        }
 
     } while (atacante_id != 0);
 
@@ -88,24 +123,7 @@ int main() {
     getchar();
 
     
-    // 1. Configuração Inicial (Setup):
-    // - Define o locale para português.
-    // - Inicializa a semente para geração de números aleatórios com base no tempo atual.
-    // - Aloca a memória para o mapa do mundo e verifica se a alocação foi bem-sucedida.
-    // - Preenche os territórios com seus dados iniciais (tropas, donos, etc.).
-    // - Define a cor do jogador e sorteia sua missão secreta.
 
-    // 2. Laço Principal do Jogo (Game Loop):
-    // - Roda em um loop 'do-while' que continua até o jogador sair (opção 0) ou vencer.
-    // - A cada iteração, exibe o mapa, a missão e o menu de ações.
-    // - Lê a escolha do jogador e usa um 'switch' para chamar a função apropriada:
-    //   - Opção 1: Inicia a fase de ataque.
-    //   - Opção 2: Verifica se a condição de vitória foi alcançada e informa o jogador.
-    //   - Opção 0: Encerra o jogo.
-    // - Pausa a execução para que o jogador possa ler os resultados antes da próxima rodada.
-
-    // 3. Limpeza:
-    // - Ao final do jogo, libera a memória alocada para o mapa para evitar vazamentos de memória.
 
     free(mapa);
 
@@ -228,11 +246,49 @@ void atacar(territorio* atacante, territorio* defensor){
 
 // sortearMissao():
 // Sorteia e retorna um ID de missão aleatório para o jogador.
+void atribuirMissao(char* destino, const char* missoes[], int totalMissoes){
+    int indiceSorteado = rand() % totalMissoes;
+    strcpy(destino, missoes[indiceSorteado]);
+}
 
 // verificarVitoria():
 // Verifica se o jogador cumpriu os requisitos de sua missão atual.
 // Implementa a lógica para cada tipo de missão (destruir um exército ou conquistar um número de territórios).
 // Retorna 1 (verdadeiro) se a missão foi cumprida, e 0 (falso) caso contrário.
+/**
+ * @brief Avalia se a missão do jogador foi cumprida.
+ * @return Retorna 1 se venceu, 0 se ainda não cumpriu.
+ */
+int verificarMissao(char* missao, territorio* mapa, int tamanho) {
+    // Caso 1: Dominar todos os territórios (todos devem ter a mesma cor)
+    if (strcmp(missao, "Dominar todos os territorios") == 0) {
+        for (int i = 1; i < tamanho; i++) {
+            if (strcmp(mapa[i].cor, mapa[0].cor) != 0) {
+                return 0; // Se achar uma cor diferente da primeira, ainda não ganhou
+            }
+        }
+        return 1;
+    }
+
+    // Caso 2: Ganhar 3 tropas (pelo menos um território com 3 ou mais tropas)
+    if (strcmp(missao, "Ganhar 3 tropas") == 0) {
+        for (int i = 0; i < tamanho; i++) {
+            if (mapa[i].tropas >= 3) return 1;
+        }
+    }
+
+    // Caso 3: Conquistar 3 territorios (exemplo: ter 3 territórios com a mesma cor do primeiro)
+    if (strcmp(missao, "Conquistar 3 territorios") == 0) {
+        int contagem = 0;
+        char* minhaCor = mapa[0].cor; // Assume que o primeiro território é o seu
+        for (int i = 0; i < tamanho; i++) {
+            if (strcmp(mapa[i].cor, minhaCor) == 0) contagem++;
+        }
+        return (contagem >= 3);
+    }
+
+    return 0; // Missão ainda não cumprida
+}
 
 // limparBufferEntrada():
 // Função utilitária para limpar o buffer de entrada do teclado (stdin), evitando problemas com leituras consecutivas de scanf e getchar.
